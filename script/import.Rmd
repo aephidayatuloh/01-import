@@ -202,14 +202,36 @@ library(dbplyr)
 
 ## SQLite
 
-```{r RSQLite, eval=FALSE}
-library(RSQLite)
+### Connect to SQLite
 
-dbcon <- dbConnect(SQLite(), "https://raw.githubusercontent.com/aephidayatuloh/01-import/master/rdb.sqlite")
+```{r RSQLite}
+library(RSQLite)
+file.exists("../data/rdb.sqlite")
+
+dbcon <- dbConnect(SQLite(), "../data/rdb.sqlite")
+dbcon
+```
+
+### Read table
+
+```{r dbtable}
+db_list_tables(dbcon)
+dbtmp <- dbcon %>% 
+  tbl("iris")
+
+dbtmp
+
+dbtbl <- dbtmp %>% 
+  collect()
+
+dbDisconnect(dbcon)
 ```
 
 
 ## MySQL
+
+### Connect to SQLite
+
 
 ```{r RMySQL}
 library(RMySQL)
@@ -220,12 +242,35 @@ mycon <- dbConnect(MySQL(),
                    password = "ytbidFxi8X",
                    host = "remotemysql.com",
                    port = 3306)
+mycon
+```
 
+### Read table
+
+
+```{r mytable}
+db_list_tables(mycon)
+mytmp <- mycon %>% 
+  tbl("iris") %>% 
+  filter(species == "setosa") %>% 
+  select(-species)
+
+mytmp
+
+mytbl <- mytmp %>% 
+  collect()
+
+dbDisconnect(mycon)
 ```
 
 # API
 
+
 ## JSON
+
+```{r}
+
+```
 
 ## Web API
 
