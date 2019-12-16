@@ -8,7 +8,7 @@ output:
     theme: spacelab
     df_print: paged
     toc: true
-    toc_depth: 4
+    toc_depth: 2
     toc_float: true
 ---
 
@@ -22,25 +22,26 @@ td {  /* Table  */
 }
 h1.title {
   font-size: 38px;
-  color: lightblue;
+  color: #3489eb;
   font-weight: bold;
 }
 h1 { /* Header 1 */
   font-size: 24px;
-  color: DarkBlue;
+  color: #34b1eb;
+  font-weight: bold;
 }
 h2 { /* Header 2 */
   font-size: 20px;
-  color: DarkBlue;
+  color: #34b1eb;
 }
 h3 { /* Header 3 */
   font-size: 16px;
 #  font-family: "Times New Roman", Times, serif;
-  color: DarkBlue;
+  color: #34b1eb;
 }
 h4 { /* Header 4 */
   font-size: 14px;
-  color: DarkBlue;
+  color: #34b1eb;
 }
 code.r{ /* Code block */
     font-size: 12px;
@@ -76,8 +77,8 @@ i.e. auto-complete code, organized panel and many more useful functional.</div>
 
 <strong style="color:#3489eb;">RStudio</strong> is available in two formats: 
 
-* <strong style="color:#3489eb;">RStudio</strong> Desktop -> program is run locally as a regular desktop application;
-* <strong style="color:#3489eb;">RStudio</strong> Server -> allows accessing RStudio using a web browser while it is running on a remote Linux server.
+* <strong style="color:#3489eb;">RStudio</strong> Desktop => program is run locally as a regular desktop application;
+* <strong style="color:#3489eb;">RStudio</strong> Server => allows accessing RStudio using a web browser while it is running on a remote Linux server.
 
 <strong style="color:#3489eb;">RStudio</strong> Desktop and <strong style="color:#3489eb;">RStudio</strong> Server are both available in free and fee-based (commercial) editions. 
 
@@ -87,11 +88,144 @@ Download latest version of <strong style="color:#3489eb;">RStudio</strong> [http
   <img src="../img/rstudio1.png" width="50%"><img src="../img/rstudio2.png" width="50%">
 </div>
 
-# Use R`s Built-in Data
+```{r pkg}
+library(tidyverse)
+library(readxl)
+library(writexl)
+library(dbplyr)
+library(RSQLite)
+library(RMySQL)
+library(jsonlite)
+```
 
-Setelah berhasil menginstall R di komputer, secara otomatis R juga menyediakan data yang dapat digunakan. Biasanya data ini digunakan untuk perkenalan dan latihan.
+# External Data File
 
-## The iris and mpg dataframe
+First step is we will import data from external data file. This time we will import txt, csv and excel file.
+
+## Txt file
+
+```{r pkgtxt}
+library(readr)
+
+# or
+library(tidyverse)
+```
+
+### Read File
+
+```{r readtxt}
+iris_txt <- read_delim("../data/iris.txt", delim = " ")
+str(iris_txt)
+head(iris_txt)
+```
+
+### Write File
+
+```{r writetxt}
+write_delim(iris, "../output/iris_out.txt", delim = "|")
+```
 
 
+## CSV file
+
+```{r pkgcsv}
+library(readr)
+
+# or
+library(tidyverse)
+```
+
+### Read File
+
+```{r readcsv}
+iris_csv <- read_csv("../data/iris.csv")
+str(iris_csv)
+head(iris_csv)
+```
+
+### Write File
+
+```{r writecsv}
+write_csv(iris, "../output/iris_out.csv")
+```
+
+## Excel File
+
+Slightly different from importing a TXT or CSV file, reading data from and writing to an Excel file requires two different package. We need a `readxl` package to import data from an excel file. And also, we need a `writexl` package to export data to an excel file. The `readxl` is part of `tidyverse` but not part of it's core. So, when you load `tiyverse` package, the `readxl` is not loaded automatically => you need to load it manually.
+
+### Read File
+
+```{r}
+library(readxl)
+
+iris_xl <- read_xlsx("../data/iris.xlsx")
+str(iris_xl)
+head(iris_xl)
+```
+
+### Write File
+
+```{r writexl}
+library(writexl)
+
+write_xlsx(iris, "../output/iris_out.xlsx")
+```
+
+
+## Online Data File
+
+We can use those previous packages to read external online data file. For example, we want to import data from CSV file that hosted in [this GitHub repository](https://github.com/aephidayatuloh/datasets). We are going to import the `german_credit_data.csv` from this link [https://raw.githubusercontent.com/aephidayatuloh/datasets/master/iris.csv]
+
+```{r}
+# We do not need to load the `readr` package because we've already load it before.
+# If you haven`t, you must load it first.
+# 
+# library(readr)
+dt_url <- "https://raw.githubusercontent.com/aephidayatuloh/datasets/master/iris.csv"
+gc <- read_csv(dt_url)
+
+str(gc)
+head(gc)
+```
+
+Using this method to import data from online repository make you do not need to download and save the file to your local machine.
+
+# Database
+
+
+
+```{r tidydb}
+library(dplyr)
+library(dbplyr)
+```
+
+
+## SQLite
+
+```{r RSQLite, eval=FALSE}
+library(RSQLite)
+
+dbcon <- dbConnect(SQLite(), "https://raw.githubusercontent.com/aephidayatuloh/01-import/master/rdb.sqlite")
+```
+
+
+## MySQL
+
+```{r RMySQL}
+library(RMySQL)
+
+mycon <- dbConnect(MySQL(),
+                   username = "bdsvI1NRVz", 
+                   dbname = "bdsvI1NRVz",
+                   password = "ytbidFxi8X",
+                   host = "remotemysql.com",
+                   port = 3306)
+
+```
+
+# API
+
+## JSON
+
+## Web API
 
