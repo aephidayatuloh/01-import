@@ -1,5 +1,5 @@
 ---
-pagetitle: "Import Data Into RStudio"
+title: "Import Data Into RStudio"
 author: "Aep Hidayatuloh"
 date: "Last Update: 16 December 2019"
 output: 
@@ -72,10 +72,9 @@ options(scipen = 99)
 <p align="center">
 <img src="../img/cover.png">
 <br/>
-<h1 style="text-align:center;">Aep Hidayatuloh</h1>
-<h1 style="text-align:center;">Last Update: 16 December 2019</h1>
 </p>
 
+<strong>This is part 1 of my Analytics Using Tidyverse Series.</strong>
 
 # Introduction
 
@@ -98,16 +97,6 @@ Download latest version of <strong style="color:#3489eb;">RStudio</strong> [http
 <div class="row">
   <img src="../img/rstudio1.png" width="50%"><img src="../img/rstudio2.png" width="50%">
 </div>
-
-```{r pkg}
-library(tidyverse)
-library(readxl)
-library(writexl)
-library(dbplyr)
-library(RSQLite)
-library(RMySQL)
-library(jsonlite)
-```
 
 # External Data File
 
@@ -162,7 +151,7 @@ write_csv(iris, "../output/iris_out.csv")
 
 ## Excel File
 
-Slightly different from importing a TXT or CSV file, reading data from and writing to an Excel file requires two different package. We need a `readxl` package to import data from an excel file. And also, we need a `writexl` package to export data to an excel file. The `readxl` is part of `tidyverse` but not part of it's core. So, when you load `tiyverse` package, the `readxl` is not loaded automatically => you need to load it manually.
+Slightly different from importing a TXT or CSV file, reading data from and writing to an Excel file requires two different packages. We need a `readxl` package to import data from an excel file. And also, we need a `writexl` package to export data to an excel file. The `readxl` is part of `tidyverse` but not part of it's core. So, when you load `tiyverse` package, the `readxl` is not loaded automatically => you need to load it manually.
 
 ### Read File
 
@@ -276,12 +265,26 @@ dbDisconnect(mycon)
 
 # API
 
+```{r}
+library(jsonlite)
+```
 
 ## JSON
 
 ```{r}
+library(jsonlite)
+iris_json <- fromJSON("../data/iris.json") 	# import JSON file
+str(iris_json)
+head(iris_json)
 
+write_json(iris, "../output/iris_out.json")
 ```
 
 ## Web API
+
+```{r}
+employee <- fromJSON("http://dummy.restapiexample.com/api/v1/employees") 
+str(employee)
+head(employee)
+```
 
